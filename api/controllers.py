@@ -545,7 +545,6 @@ class SearchMovieSession(APIView):
 
     @api_view(['POST'])
     def searchMS(request):
-        
         keyword = request.data.get('keyword', '')
         if not keyword:
             return JsonResponse({'error': 'Please provide a keyword to search for'})
@@ -553,7 +552,6 @@ class SearchMovieSession(APIView):
         ms = [m for m in result]
         data = [{'session_date':m.session_date,
                 'session_time':m.session_time} for m in ms]
-
         return Response(data)
     
 class SearchMovie(APIView):
