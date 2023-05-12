@@ -393,20 +393,22 @@ class FnBBooking(models.Model):
     booking_owner = models.ForeignKey(User, on_delete=models.CASCADE)
     menu = models.ForeignKey(FoodandBeverage, on_delete=models.CASCADE)
     
-    def get_menu_price(self):
-        return self.menu.price
-    
-    def save(self, *args, **kwargs):
-        if not self.price:
-            self.price = self.get_menu_price()
+    def FnBBookingCreate(self, booking_owner, menu, *args, **kwargs):
+        self.booking_owner = booking_owner
+        self.menu = menu
         super().save(*args, **kwargs)
-
-    @property
-    def price(self):
-        return self.get_menu_price()
+        
+    @classmethod
+    def FnBBookingall(cls):
+        return cls.objects.all()
+    
+    def fnbdelete(self, *args, **kwargs):
+        super(FnBBooking, self).delete(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.menu}X{self.price}"
+        return f'{self.booking_owner.username} - {self.menu.name}'
+    
+
 
 # Report (cinema owner)
 class Report(models.Model):
