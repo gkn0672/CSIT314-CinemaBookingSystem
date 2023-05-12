@@ -95,7 +95,11 @@ class MovieBookingAdmin(admin.ModelAdmin):
         return obj.get_ticket_price()
     get_price.short_description = 'Price'
     get_price.admin_order_field = 'price'
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 1d9a7ca66afe85c33881fcbe230bb7b9b0233a63
 class FnBBookingAdmin(admin.ModelAdmin):
     list_display = ('id', 'booking_owner', 'menu', 'menu_price')
     list_filter = ('booking_owner','menu')
