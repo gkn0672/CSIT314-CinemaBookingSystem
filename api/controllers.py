@@ -545,6 +545,7 @@ class SearchMovieSession(APIView):
 
     @api_view(['POST'])
     def searchMS(request):
+        
         keyword = request.data.get('keyword', '')
         if not keyword:
             return JsonResponse({'error': 'Please provide a keyword to search for'})
