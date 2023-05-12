@@ -720,6 +720,24 @@ class DeleteFnbs(APIView):
         fnb_obj.fnbdelete()
         # Return a success response
         return Response(status=status.HTTP_200_OK)
+    
+class SearchFnBs(APIView):
+    permission_classes = [AllowAny]
+
+    @api_view(['POST'])
+    def searchFnB(request):
+        keyword = request.data.get('keyword', '')
+        if not keyword:
+            return JsonResponse({'error': 'Please provide a keyword to search for'})
+
+        result = FoodandBeverage.fnbsearch(keyword)
+        fnb = [f for f in result]
+        data = [{'menu': f.menu,
+                 'menu_description':f.menu_description,
+                 'price':f.price,
+                 'menuIMG':f.menuIMG
+                 } for f in fnb]
+        return Response(data)
 
 
 class AddBooking(APIView):
@@ -783,22 +801,19 @@ class DeleteFnBBooking(APIView):
         fnb = FnBBooking()
         id = request.data.get('id')
         try:
-            fnbooking_obj = fnb.fnbget(id)
+            fnbooking_obj = fnb.fnbbookingGet(id)
+
         except FnBBooking.DoesNotExist:
-            
+
             # If the movie does not exist, return 400 error
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         # Delete the FnB Booking from the database
-        fnbooking_obj.fnbdelete()
+        fnbooking_obj.FnBBookingDelete()
 
         # Return a success response
         return Response(status=status.HTTP_200_OK)
-
-
-
     
-
 
 class ViewAllBooking(APIView):
     authentication_classes = [TokenAuthentication]

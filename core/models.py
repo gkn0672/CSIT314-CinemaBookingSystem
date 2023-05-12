@@ -397,16 +397,30 @@ class FnBBooking(models.Model):
         self.booking_owner = booking_owner
         self.menu = menu
         super().save(*args, **kwargs)
+
+    def fnbbookingGet(self, id):
+        return FnBBooking.objects.get(pk = id)
         
     @classmethod
     def FnBBookingall(cls):
         return cls.objects.all()
     
-    def fnbdelete(self, *args, **kwargs):
+    def FnBBookingDelete(self, *args, **kwargs):
         super(FnBBooking, self).delete(*args, **kwargs)
 
+    def save(self, *args, **kwargs):
+        if not self.price:
+            self.price = self.get_menu_price()
+        super().save(*args, **kwargs)
+
+    def get_menu_price(self):
+        return self.menu.price
+    @property
+    def menu_price(self):
+        return self.get_menu_price()
+
     def __str__(self):
-        return f'{self.booking_owner.username} - {self.menu.name}'
+        return f"{self.menu}X{self.price}"
     
 
 
