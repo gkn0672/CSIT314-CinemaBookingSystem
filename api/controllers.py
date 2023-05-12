@@ -537,7 +537,23 @@ class UpdateMovieSession(APIView):
             return Response({'message': 'Cinema Room does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
         ms.moviesessionupdate(session_date, session_time)
-        return Response(status=status.HTTP_200_OK)        
+        return Response(status=status.HTTP_200_OK)     
+
+class SearchMovieSession(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @api_view(['POST'])
+    def searchMS(request):
+        keyword = request.data.get('keyword', '')
+        if not keyword:
+            return JsonResponse({'error': 'Please provide a keyword to search for'})
+        result = MovieSession.moviesessionsearch(keyword)
+        ms = [m for m in result]
+        data = [{'session_date':m.session_date,
+                'session_time':m.session_time} for m in ms]
+
+        return Response(data)
     
 class SearchMovie(APIView):
     permission_classes = [AllowAny]
